@@ -20,8 +20,8 @@ http://ec2-54-244-205-68.us-west-2.compute.amazonaws.com/
 Set up the configurations specified by the rubric for the project. 
 Only allow connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
 
-'sudo ufw default deny incoming'
-'sudo ufw default allow outgoing'
+ 'sudo ufw default deny incoming'
+' sudo ufw default allow outgoing'
 'sudo ufw allow 2200/tcp'
 'sudo ufw allow http'
 'sudo ufw allow ntp'
