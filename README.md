@@ -20,25 +20,25 @@ http://ec2-54-244-205-68.us-west-2.compute.amazonaws.com/
 Set up the configurations specified by the rubric for the project. 
 Only allow connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
 
-'''
+```
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow 2200/tcp
 sudo ufw allow http
 sudo ufw allow ntp
 sudo ufw enable
-'''
+```
 After Setting up the firewall, check by using
 
-'''sudo ufw status'''
+```sudo ufw status```
 
 ### Change SSH Port to 2200
 
-Edit file '/etc/ssh/sshd_config' using your preferred text editor to change port from 22 to 2200
-'''
+Edit file `/etc/ssh/sshd_config` using your preferred text editor to change port from 22 to 2200
+```
 sudo vim /etc/ssh/sshd_config
 sudo service ssh restart
-'''
+```
 
 ### Update installed packages
 
@@ -60,55 +60,60 @@ sudo apt-get install git
 
 
 ### Add user grader and allow sudo 
-
-'sudo adduser grader'
-'sudo usermod -aG sudo grader'
+```
+sudo adduser grader
+sudo usermod -aG sudo grader
+```
 
 ### Set-up SSH keys for user grader
 
 The ssh key is given in the notes to grader
 
-'ssh -i [ssh key] -p 2200 grader@54.244.205.68'
+`ssh -i [ssh key] -p 2200 grader@54.244.205.68`
 
 ### Disable Root Login
-'sudo vim /etc/ssh/sshd_config'
+`sudo vim /etc/ssh/sshd_config`
 Change line 
 PermitRootLogin without-password to PermitRootLogin no
 
 ### Set Up Database
-'sudo -u postgres createuser -P catalog'
-'sudo -u postgres createdb -O catalog catalog'
+```
+sudo -u postgres createuser -P catalog
+sudo -u postgres createdb -O catalog catalog
+```
 
 ### Clone Item Catalog App from Github
 
 Clone the repository from Github using clone command and make .git inaccessable
-'''
+
+```
 cd /var/www
 sudo mkdir catalog
 git clone https://github.com/seun5/Finance-Buddy.git catalog
 sudo vim .htaccess
-'''
-Add line RedirectMatch 404 /\.git
+```
+
+Add line `RedirectMatch 404 /\.git`
 
 ### Adjust app to prepare for Deployment
 
-Rename app to __init.py
-'sudo mv application.py __init__.py'
+Rename app to __init__.py
+`sudo mv application.py __init__.py`
 
-Change engine from sqlite to postgresql for 'model.py' and '__init.py'
-'engine = create_engine('postgresql://catalog:DB-PASSWORD@localhost/catalog')'
+Change engine from sqlite to postgresql for `model.py` and `__init__.py`
+`engine = create_engine('postgresql://catalog:DB-PASSWORD@localhost/catalog')`
 
 
 #### Update Google OAuth
-- Any reference to 'client_secrets.json' is now '/var/www/catalog/catalog/client_secrets.json'
+- Any reference to `client_secrets.json` is now `/var/www/catalog/catalog/client_secrets.json`
 - Add the URL and IP address in the javascript_origins field in the Google Developers Console settings 
-- Make sure that the client id in 'template/login.html' is the same as the client id in 'client_secrets.json'
+- Make sure that the client id in `template/login.html` is the same as the client id in `client_secrets.json`
 
 #### Create WSGI File
 Create a empty WSGi File
-'sudo vim /var/www/catalog/catalog.wsgi'
+`sudo vim /var/www/catalog/catalog.wsgi`
 Copy the Following
-'''
+```
 #!/usr/bin/python
 import sys
 import logging
@@ -118,14 +123,14 @@ sys.path.insert(0, "/var/www/fullstack-nanodegree-vm/catalog/catalog/")
 from catalog import app as application
 
 application.secret_key = 'YOUR_SECRET_KEY'
-'''
+```
 
 #### Configure Apache2
 
-'sudo nano /etc/apache2/sites-available/catalog.conf'
+`sudo nano /etc/apache2/sites-available/catalog.conf`
 
 
-'''
+```
 <VirtualHost *:80>
 		ServerName http://54.244.205.68
 		ServerAlias HOSTNAME ec2-54-244-205-68.us-west-2.compute.amazonaws.com/
@@ -144,16 +149,15 @@ application.secret_key = 'YOUR_SECRET_KEY'
 		LogLevel warn
 		CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
-'''
+```
 
 
 Launch your app
-'''
+```
 sudo a2dissite 000-default.conf
 sudo a2ensite catalog.conf
 sudo service apache2 restart
-'''
-
+```
 
 ## References:
 
