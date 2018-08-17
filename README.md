@@ -20,22 +20,25 @@ http://ec2-54-244-205-68.us-west-2.compute.amazonaws.com/
 Set up the configurations specified by the rubric for the project. 
 Only allow connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
 
- 'sudo ufw default deny incoming'
-' sudo ufw default allow outgoing'
-'sudo ufw allow 2200/tcp'
-'sudo ufw allow http'
-'sudo ufw allow ntp'
-'sudo ufw enable'
-
+'''
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 2200/tcp
+sudo ufw allow http
+sudo ufw allow ntp
+sudo ufw enable
+'''
 After Setting up the firewall, check by using
 
-'sudo ufw status'
+'''sudo ufw status'''
 
 ### Change SSH Port to 2200
 
 Edit file '/etc/ssh/sshd_config' using your preferred text editor to change port from 22 to 2200
-'sudo vim /etc/ssh/sshd_config'
-'sudo service ssh restart'
+'''
+sudo vim /etc/ssh/sshd_config
+sudo service ssh restart
+'''
 
 ### Update installed packages
 
